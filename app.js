@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const createError = require('http-errors')
 const cors = require('cors')
 
+require('./helpers/mongodb_init')
 require('dotenv').config()
 
 //logs the request info
