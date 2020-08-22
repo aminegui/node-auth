@@ -31,4 +31,5 @@ userSchema.pre('save', async function(next){
       }
 })
 
+
 module.exports = User = mongoose.model('user', userSchema)
