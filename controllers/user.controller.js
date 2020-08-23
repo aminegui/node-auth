@@ -3,8 +3,8 @@ const userService = require('../services')
 module.exports = userController = {
     register : async (req, res, next)=>{
         try {
-          const savedUser = await userService.createUser(req.body)
-          res.send(savedUser)
+          const tokens = await userService.createUser(req.body)
+          res.send(tokens)
         } catch (error) {
              if(error.isJoi===true){
                  error.status=422;
