@@ -31,5 +31,15 @@ userSchema.pre('save', async function(next){
       }
 })
 
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: function (doc, ret) {
+      // remove these props when object is serialized
+      delete ret._id;
+      delete ret.password;
+  }
+});
+
 
 module.exports = User = mongoose.model('user', userSchema)

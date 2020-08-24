@@ -40,4 +40,30 @@ module.exports = jwtManager = {
          });
     })
 },
+verifyAccessToken: (req, res, next)=>{
+    if(!req.headers['authorization']) return next(createError.Unauthorized());
+    const authInfo = req.headers['authorization'].split(' ');
+    const token= authInfo[1];
+    jwt.verify(token, process.env.ACCESS_TOKEN_KEY, function(err, payload) {
+        if(err){
+            const message = err.name==='JsonWebTokenError'?'Unauthorized':err.message;
+            return next(createError.InternalServerError(message))
+        }
+        req.payload = payload
+        next()
+      });
+},
+verifyRefreshToken: (refreshToken)=>{
+    return new Promise((resolve, reject)=>{
+        jwt.verify(refreshToken, process.env.REFRESH_TOKEN_KEY, function(err, payload) {
+            if(err){
+                const message = err.name==='JsonWebTokenError'?'Unauthorized':err.message;
+                return reject(createError.InternalServerError(message))
+            }
+            const userId=payload.aud;
+            return resolve(userId)
+            })
+          });
+
+}
 }

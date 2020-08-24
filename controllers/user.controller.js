@@ -30,4 +30,5 @@ module.exports = userController = {
             next(error)
         }
     }
+
 }
