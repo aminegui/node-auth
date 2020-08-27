@@ -1,9 +1,12 @@
 const express = require('express');
-const app = express()
-const morgan =require('morgan')
-const helmet = require('helmet')
-const createError = require('http-errors')
-const cors = require('cors')
+const app = express();
+const morgan =require('morgan');
+const helmet = require('helmet');
+const createError = require('http-errors');
+const cors = require('cors');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+const swaggerUi=require('swagger-ui-express');
 
 require('./helpers/mongodb_init')
 require('dotenv').config()
@@ -17,7 +20,7 @@ app.use(express.json())
 //cors enable
 app.use(cors())
 
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 app.use('/api/user', require('./routes/user.route'))
 
 //send back a 404 error for any unknown api request

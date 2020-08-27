@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
+const toJSON = require('./toJSON.plugin')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -14,10 +15,11 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required:true
+        required:true,
+        private: true
     }
 })
-
+userSchema.plugin(toJSON)
 userSchema.pre('save', async function(next){
     try {
         if (this.isNew) {
@@ -31,15 +33,6 @@ userSchema.pre('save', async function(next){
       }
 })
 
-userSchema.set('toJSON', {
-  virtuals: true,
-  versionKey: false,
-  transform: function (doc, ret) {
-      // remove these props when object is serialized
-      delete ret._id;
-      delete ret.password;
-  }
-});
 
 
 module.exports = User = mongoose.model('user', userSchema)

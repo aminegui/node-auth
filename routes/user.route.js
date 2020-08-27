@@ -7,7 +7,7 @@ const jwtManager = require('../helpers/jwt_helper')
 router.post('/register', userController.register )
 
 //return list of all users
-router.get('/users', jwtManager.verifyAccessToken, userController.getUsers)
+router.get('/users', userController.getUsers)
 
 //find user by his id
 router.get('/:userId', userController.getUser)

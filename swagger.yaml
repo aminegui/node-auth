@@ -1,0 +1,127 @@
+openapi: 3.0.1
+info:
+  title: AUTH Api
+  description: 'Auth api using access and refresh tokens .'
+  contact:
+    email: med-amine.guizani@hotmail.fr
+  version: 1.0.0
+servers:
+- url: http://localhost:3000
+tags:
+- name: user
+  description: Operations about user
+paths:
+  /api/user/register:
+    post:
+      tags:
+      - user
+      summary: Create user
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: john
+                email:
+                  type: string
+                  example: "john@doh.com"
+                password:
+                  type: string
+                  example: "password"
+        required: true
+      responses:
+        "200":
+          description: The inputs validation and user registration request was successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1OTYzMTk4OTgsImV4cCI6MTU5NjMyMzQ5OCwiYXVkIjoiNWYyNWU4OTkxZDUwY2I0ZjA4MWJiMmJmIiwiaXNzIjoiZ29vZ2xlLmNvbSJ9.c_xEQEH9kfn4rT8mZWm36M54sFyjhAExMDpT9zm-DTM"
+                  refreshToken:
+                    type: string
+                    example: "tyJhbGfgOiJIUzI1NiIsInR5cCI6IkpXVCC7.eyJpYXQiOjE1OTYzMTk4OTgsImV4cCI6MTU5NjMyMzQ5OCwiYXVkIjoiNWYyNWU4OTkxZDUwY2I0ZjA4MWJiMmJmIiwiaXNzIjoiZ29vZ2xlLmNvbSJ9.c_xEQEH9kfn4rT8mZWm36M54sFyjhAExMDpT9zm-DTM"
+        "422":
+          description: Invalid username/password
+          content: {}
+  /api/user/users:
+    get:
+      tags:
+      - user
+      summary: return list of all users
+      operationId: getUsers
+      responses:
+        "200":
+          description: return a list off all users with name , email and id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "john"
+                  email:
+                    type: string
+                    example: "john@doh.com"
+                  id:
+                    type: string
+                    example: "5f419c0c1e921134d84d79c5"
+  /api/user/:userId:
+    parameters:
+     - in: path
+        name: id
+        description: user id
+        required: true
+        example: "5f419c0c1e921134d84d79c5"
+        schema:
+           type: string
+    get:
+        summary: Get a single user by id
+        description: access any account
+        operationId: getUserById
+        security:
+          - bearerAuth: []
+        responses:
+          "200":
+            description: Details of the specified account
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: "5eb12e197e06a76ccdefc121"
+                    name:
+                      type: string
+                      example: "Jason"
+                    email:
+                      type: string
+                      example: "jason@example.com"
+          "404":
+            description: Invalid user id
+            content: {}
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name: 
+          type: string  
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: User
